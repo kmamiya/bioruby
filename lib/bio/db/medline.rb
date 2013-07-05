@@ -231,6 +231,10 @@ class MEDLINE < NCBIDB
 
   # DEP  - Date of Electronic Publication
   #   Electronic publication date.
+  def dep
+    @pubmed['DEP'].strip
+  end
+  alias electronic_publication_date dep
 
   # EDAT - Entrez Date
   #   The date the citation was added to PubMed.

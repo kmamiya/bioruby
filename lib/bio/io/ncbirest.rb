@@ -185,6 +185,12 @@ class REST
     return list
   end
 
+  def einfo( db_name )
+    serv = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
+    opts = default_parameters.merge({ "db" => db_name})
+    response = ncbi_post_form(serv, opts)
+    return response.body
+  end
 
   # Search the NCBI database by given keywords using E-Utils (esearch) service
   # and returns an array of entry IDs.
@@ -336,6 +342,27 @@ class REST
     #return result.strip.split(/\n\n+/)
   end
 
+  def elink(ids, hash = {})
+    serv = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
+    opts = default_parameters.merge({"retmode" => "xml"})
+    opts.update(hash)
+
+    case ids
+    when Array
+      list = ids
+    else
+      list = ids.to_s.split(/\s*,\s*/)
+    end
+
+    result = ""
+    opts["id"] = list.join(',')
+    unless opts["id"].empty?
+      response = ncbi_post_form(serv, opts)
+      result = response.body
+    end
+    return result
+  end
+
   def self.einfo
     self.new.einfo
   end
@@ -352,6 +379,9 @@ class REST
     self.new.efetch(*args)
   end
 
+  def self.elink(*args)
+    self.new.elink(*args)
+  end
 
   # Shortcut methods for the ESearch service
   class ESearch
