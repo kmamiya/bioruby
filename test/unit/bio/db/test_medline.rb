@@ -182,6 +182,11 @@ module Bio
       assert_equal(["GARTLER, S. M."], Bio::MEDLINE.new("AU  - GARTLER SM").authors)
     end
     
+    def test_electronic_publication_date
+      assert_equal("20060530", Bio::MEDLINE.new("DEP - 20060530").dep)
+      assert_equal("20060530", Bio::MEDLINE.new("DEP - 20060530").electronic_publication_date)
+    end
+
     AGILE = <<-EOMED
 PMID- 16734914
 OWN - NLM
